@@ -1,0 +1,42 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "com.example.exampleapp"
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+        buildConfigField 'String', 'BASE_URL', '"http://example.com/default"'
+        resValue 'string', 'app_name', 'Default'
+    }
+    productFlavors {
+        // Each Flavor will lead to it's own app. In this way you can create multiple apps, which
+        // use a different base url.
+        app1 {
+            applicationId 'com.example.exampleapp1'
+            buildConfigField 'String', 'BASE_URL', '"http://example.com/"'
+            resValue 'string', 'app_name', 'Example App 1'
+        }
+        app2 {
+            applicationId 'com.example.exampleapp2'
+            buildConfigField 'String', 'BASE_URL', '"http://example.com/subfolder"'
+            resValue 'string', 'app_name', 'Example App 2'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile project(':photog')
+}
