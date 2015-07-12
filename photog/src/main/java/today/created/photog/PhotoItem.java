@@ -1,22 +1,18 @@
 package today.created.photog;
 
+import android.os.Parcelable;
+
+import auto.parcel.AutoParcel;
+
 /**
  * Created by jolandaverhoef on 12/07/15.
  */
-public class PhotoItem {
-    private final String src;
-    private final String baseUrl;
+@AutoParcel
+public abstract class PhotoItem implements Parcelable {
+    abstract String src();
+    abstract String baseUrl();
 
-    public PhotoItem(String src, String baseUrl) {
-        this.src = src;
-        this.baseUrl = baseUrl;
-    }
-
-    public String getSrc() {
-        return src;
-    }
-
-    public String getBaseUrl() {
-        return baseUrl;
+    static PhotoItem create(String src, String baseUrl) {
+        return new AutoParcel_PhotoItem(src, baseUrl);
     }
 }
