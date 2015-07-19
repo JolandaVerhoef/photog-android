@@ -2,12 +2,13 @@ package com.example.exampleapp;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import today.created.photog.ViewerActivityFragment;
 
-public class ViewerActivity extends AppCompatActivity {
+public class ViewerActivity extends AppCompatActivity implements ViewerActivityFragment.OnAlbumSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +33,19 @@ public class ViewerActivity extends AppCompatActivity {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
+    }
+
+    @Override
+    public void onAlbumSelected(String url) {
+        Fragment fragment = new ViewerActivityFragment();
+        Bundle                 bundle = new Bundle();
+        bundle.putString("baseUrl", url);
+        fragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().addToBackStack(null)
+                .replace(R.id.main_view, fragment).commit();
     }
 }
