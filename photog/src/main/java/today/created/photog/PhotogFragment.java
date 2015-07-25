@@ -26,7 +26,7 @@ public class PhotogFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         host = getArguments().getString("baseUrl");
         if(getChildFragmentManager().findFragmentByTag("baseFragment") == null) {
-            Fragment fragment = getAlbumFragment("");
+            Fragment fragment = getAlbumFragment("/");
             getChildFragmentManager().beginTransaction()
                     .replace(R.id.photog_container, fragment, "baseFragment").commit();
         }

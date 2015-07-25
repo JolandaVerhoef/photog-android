@@ -16,7 +16,8 @@ public class ViewerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewer);
         startFullscreen();
-        if ( savedInstanceState == null) {
+        photogFragment = (PhotogFragment) getSupportFragmentManager().findFragmentByTag("photog");
+        if ( photogFragment == null) {
             initializeFragment();
         }
     }
@@ -34,7 +35,7 @@ public class ViewerActivity extends AppCompatActivity {
         bundle.putString("baseUrl", BuildConfig.BASE_URL);
         photogFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
-            .add(R.id.main_view, photogFragment).commit();
+            .add(R.id.main_view, photogFragment, "photog").commit();
     }
 
     private void startFullscreen() {
