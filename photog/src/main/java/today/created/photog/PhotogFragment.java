@@ -7,10 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * Main fragment of this library. This fragment takes care of the stack of albums being shown
+ * to the user.
+ */
 public class PhotogFragment extends Fragment
-        implements ViewerFragment.OnAlbumSelectedListener {
+        implements AlbumFragment.OnAlbumSelectedListener {
 
-    View bottomFeaturesView;
+    private String host;
 
     @Nullable
     @Override
@@ -20,36 +24,31 @@ public class PhotogFragment extends Fragment
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        bottomFeaturesView = view.findViewById(R.id.bottom_features);
-        ((PhotogView) view).setOnFlingUpListener(new PhotogView.OnFlingListener() {
-            @Override
-            public void onFlingUp() {
-                showBottomFeatures();
-            }
-
-            @Override
-            public void onFlingDown() {
-                hideBottomFeatures();
-            }
-        });
-        onAlbumSelected(getArguments().getString("baseUrl"));
-    }
-
-    private void showBottomFeatures() {
-        bottomFeaturesView.setVisibility(View.VISIBLE);
-    }
-
-    private void hideBottomFeatures() {
-        bottomFeaturesView.setVisibility(View.GONE);
+        host = getArguments().getString("baseUrl");
+        if(getChildFragmentManager().findFragmentByTag("baseFragment") == null) {
+            Fragment fragment = getAlbumFragment("");
+            getChildFragmentManager().beginTransaction()
+                    .replace(R.id.photog_container, fragment, "baseFragment").commit();
+        }
     }
 
     @Override
-    public void onAlbumSelected(String url) {
-        Fragment fragment = new ViewerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("baseUrl", url);
-        fragment.setArguments(bundle);
+    public void onAlbumSelected(String path) {
+        Fragment fragment = getAlbumFragment(path);
         getChildFragmentManager().beginTransaction().addToBackStack(null)
-                .replace(R.id.photo_container, fragment).commit();
+                .replace(R.id.photog_container, fragment).commit();
+    }
+
+    private Fragment getAlbumFragment(String path) {
+        Fragment fragment = new AlbumFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("host", host);
+        bundle.putString("path", path);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public boolean onBackPressed() {
+        return getChildFragmentManager().popBackStackImmediate();
     }
 }

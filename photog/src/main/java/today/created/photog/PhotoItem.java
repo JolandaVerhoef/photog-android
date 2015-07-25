@@ -10,9 +10,10 @@ import auto.parcel.AutoParcel;
 @AutoParcel
 public abstract class PhotoItem implements Parcelable {
     abstract String src();
-    abstract String baseUrl();
+    abstract String host();
+    abstract String path();
 
-    static PhotoItem create(String src, String baseUrl) {
-        return new AutoParcel_PhotoItem(src, baseUrl);
+    static PhotoItem create(String src, String host, String path) {
+        return new AutoParcel_PhotoItem(src, host, path);
     }
 }

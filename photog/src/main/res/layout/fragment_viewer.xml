@@ -1,17 +1,23 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_height="match_parent"
-             android:layout_width="match_parent">
+<today.created.photog.PhotogView xmlns:android="http://schemas.android.com/apk/res/android"
+                                 android:layout_height="match_parent"
+                                 android:layout_width="match_parent">
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_gravity="center"
-        android:indeterminate="true"/>
+    <ProgressBar style="?android:attr/progressBarStyleLarge"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/progressBar"
+                 android:layout_gravity="center"
+                 android:indeterminate="true"/>
 
     <today.created.photog.HackyViewPager android:id="@+id/view_pager"
                                          android:layout_width="match_parent"
                                          android:layout_height="match_parent"/>
 
-</FrameLayout>
+    <Button android:id="@+id/bottom_features"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/enter_location"
+            android:layout_gravity="bottom"
+            android:visibility="gone"/>
+
+</today.created.photog.PhotogView>

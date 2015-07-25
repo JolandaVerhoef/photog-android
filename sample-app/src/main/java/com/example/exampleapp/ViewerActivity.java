@@ -9,6 +9,8 @@ import today.created.photog.PhotogFragment;
 
 public class ViewerActivity extends AppCompatActivity {
 
+    private PhotogFragment photogFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,13 +21,20 @@ public class ViewerActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if(! photogFragment.onBackPressed()) {
+            finish();
+        }
+    }
+
     private void initializeFragment() {
-        PhotogFragment fragment = new PhotogFragment();
+        photogFragment = new PhotogFragment();
         Bundle bundle = new Bundle();
         bundle.putString("baseUrl", BuildConfig.BASE_URL);
-        fragment.setArguments(bundle);
+        photogFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
-            .add(R.id.main_view, fragment).commit();
+            .add(R.id.main_view, photogFragment).commit();
     }
 
     private void startFullscreen() {

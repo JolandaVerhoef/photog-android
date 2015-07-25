@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="enter_location">Enter location</string>
+    <string name="open">open</string>
+    <string name="open_url">Open URL</string>
 </resources>

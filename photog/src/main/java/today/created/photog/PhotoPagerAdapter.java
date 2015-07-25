@@ -13,15 +13,14 @@ import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
- * Created by jolanda on 7/25/15.
- * Copyright (c) 2015 Blendle. All rights reserved.
+ * Adapter that binds the photo items to the views.
  */
 public class PhotoPagerAdapter extends PagerAdapter {
 
     private final Picasso mPicasso;
-    private final ViewerFragment.OnAlbumSelectedListener mAlbumSelectedListener;
+    private final AlbumFragment.OnAlbumSelectedListener mAlbumSelectedListener;
 
-    public PhotoPagerAdapter(Picasso picasso, ViewerFragment.OnAlbumSelectedListener listener) {
+    public PhotoPagerAdapter(Picasso picasso, AlbumFragment.OnAlbumSelectedListener listener) {
         mPicasso = picasso;
         mAlbumSelectedListener = listener;
     }
@@ -37,17 +36,13 @@ public class PhotoPagerAdapter extends PagerAdapter {
     public View instantiateItem(ViewGroup container, int position) {
         final PhotoItem photoItem = mPhotoItems.get(position);
         PhotoView photoView = new PhotoView(container.getContext());
-        mPicasso.load(photoItem.baseUrl() + photoItem.src())
+        mPicasso.load(photoItem.host() + photoItem.path() + photoItem.src())
                 .into(photoView);
 
-        photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
-            @Override
-            public void onPhotoTap(View view, float v, float v1) {
-                if(photoItem.src().endsWith("thumbnails/all.jpg")) {
-                    String link = photoItem.baseUrl() +
-                            photoItem.src().replace("thumbnails/all.jpg", "");
-                    mAlbumSelectedListener.onAlbumSelected(link);
-                }
+        photoView.setOnPhotoTapListener((view, v, v1) -> {
+            if(photoItem.src().endsWith("thumbnails/all.jpg")) {
+                mAlbumSelectedListener.onAlbumSelected(photoItem.path() +
+                        photoItem.src().replace("thumbnails/all.jpg", ""));
             }
         });
         container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
