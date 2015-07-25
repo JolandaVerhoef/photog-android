@@ -82,7 +82,8 @@ public class AlbumFragment extends Fragment {
         }
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
             @Override
             public void onPageSelected(int position) {
@@ -90,7 +91,8 @@ public class AlbumFragment extends Fragment {
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrollStateChanged(int state) {
+            }
         });
 
         bottomFeaturesView = rootView.findViewById(R.id.bottom_features);
@@ -120,7 +122,7 @@ public class AlbumFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mPhotoItems::add,
-                        Throwable::printStackTrace,
+                        throwable -> mAdapter.setPhotoItems(new ArrayList<>()),
                         () -> mAdapter.setPhotoItems(mPhotoItems));
     }
 
