@@ -1,10 +1,7 @@
 package today.created.photog;
 
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,39 +17,31 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import icepick.Icepick;
 import icepick.Icicle;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import uk.co.senab.photoview.PhotoView;
-import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class ViewerActivityFragment extends Fragment {
+/**
+ * This fragment can show one album using a viewpager.
+ * The url for this album is passed through via the fragment's arguments
+ */
+public class ViewerFragment extends Fragment {
     public interface OnAlbumSelectedListener {
         void onAlbumSelected(String url);
     }
 
-    private Activity mActivity;
-
     private String  mBaseUrl;
-    private Picasso mPicasso;
+
     @Icicle
     ArrayList<PhotoItem> mPhotoItems = new ArrayList<>();
+
     @Icicle
-    int                  currentPage = 0;
-    private SamplePagerAdapter mAdapter;
+    int currentPage = 0;
 
-    public ViewerActivityFragment() {
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.mActivity = activity;
-    }
+    private PhotoPagerAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +65,9 @@ public class ViewerActivityFragment extends Fragment {
 
     @Override
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
-        mAdapter = new SamplePagerAdapter();
+        mAdapter = new PhotoPagerAdapter(Picasso.with(getActivity()),
+                (OnAlbumSelectedListener) getParentFragment());
+
         ViewPager mViewPager = (HackyViewPager) rootView.findViewById(R.id.view_pager);
         mViewPager.setAdapter(mAdapter);
 
@@ -87,9 +78,6 @@ public class ViewerActivityFragment extends Fragment {
             loadPhotos(mBaseUrl);
         }
         mViewPager.setCurrentItem(currentPage);
-        mPicasso = Picasso.with(getActivity());
-
-
     }
 
     private void loadPhotos(String url) {
@@ -127,58 +115,4 @@ public class ViewerActivityFragment extends Fragment {
         Response response = client.newCall(request).execute();
         return Jsoup.parse(response.body().string());
     }
-
-    class SamplePagerAdapter extends PagerAdapter {
-
-        private List<PhotoItem> mPhotoItems = new ArrayList<>();
-
-        @Override
-        public int getCount() {
-            return mPhotoItems.size();
-        }
-
-        @Override
-        public View instantiateItem(ViewGroup container, int position) {
-            final PhotoItem photoItem = mPhotoItems.get(position);
-            PhotoView photoView = new PhotoView(container.getContext());
-            mPicasso.load(photoItem.baseUrl() + photoItem.src())
-                .into(photoView);
-
-            photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
-                @Override
-                public void onPhotoTap(View view, float v, float v1) {
-                    if(photoItem.src().endsWith("thumbnails/all.jpg")) {
-                        String link = photoItem.baseUrl() +
-                                photoItem.src().replace("thumbnails/all.jpg", "");
-
-                        ((OnAlbumSelectedListener) mActivity).onAlbumSelected(link);
-                    }
-                }
-            });
-            container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
-            return photoView;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object);
-        }
-
-        public int getItemPosition (Object object) { return POSITION_NONE; }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        public void setPhotoItems(List<PhotoItem> photoItems) {
-            mPhotoItems = new ArrayList<>();
-            for(PhotoItem photoItem : photoItems) {
-                mPhotoItems.add(photoItem);
-            }
-            notifyDataSetChanged();
-        }
-    }
-
 }

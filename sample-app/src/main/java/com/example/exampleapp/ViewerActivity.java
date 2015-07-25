@@ -2,13 +2,12 @@ package com.example.exampleapp;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import today.created.photog.ViewerActivityFragment;
+import today.created.photog.PhotogFragment;
 
-public class ViewerActivity extends AppCompatActivity implements ViewerActivityFragment.OnAlbumSelectedListener {
+public class ViewerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +20,8 @@ public class ViewerActivity extends AppCompatActivity implements ViewerActivityF
     }
 
     private void initializeFragment() {
-        ViewerActivityFragment fragment = new ViewerActivityFragment();
-        Bundle                 bundle = new Bundle();
+        PhotogFragment fragment = new PhotogFragment();
+        Bundle bundle = new Bundle();
         bundle.putString("baseUrl", BuildConfig.BASE_URL);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
@@ -37,15 +36,5 @@ public class ViewerActivity extends AppCompatActivity implements ViewerActivityF
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
-    }
-
-    @Override
-    public void onAlbumSelected(String url) {
-        Fragment fragment = new ViewerActivityFragment();
-        Bundle                 bundle = new Bundle();
-        bundle.putString("baseUrl", url);
-        fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().addToBackStack(null)
-                .replace(R.id.main_view, fragment).commit();
     }
 }
