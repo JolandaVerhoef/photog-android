@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/photog_container"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<today.created.photog.PhotogView xmlns:android="http://schemas.android.com/apk/res/android"
+                                         android:id="@+id/photog_container"
+                                         android:layout_width="match_parent"
+                                         android:layout_height="match_parent">
 
-</FrameLayout>
+    <FrameLayout android:id="@+id/photo_container"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"/>
+
+    <Button android:id="@+id/bottom_features"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/enter_location"
+            android:layout_gravity="bottom"
+            android:visibility="gone"/>
+
+</today.created.photog.PhotogView>
