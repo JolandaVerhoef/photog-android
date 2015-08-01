@@ -49,12 +49,20 @@ public class PhotogFragment extends Fragment
     }
 
     private Fragment getAlbumFragment(String path) {
+        path = sanitizePath(path);
         Fragment fragment = new AlbumFragment();
         Bundle bundle = new Bundle();
         bundle.putString("host", host);
         bundle.putString("path", path);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    private String sanitizePath(String path) {
+        String result = path;
+        if(!result.startsWith("/")) result = '/' + result;
+        if(!result.endsWith("/")) result = result + '/';
+        return result;
     }
 
     public boolean onBackPressed() {
