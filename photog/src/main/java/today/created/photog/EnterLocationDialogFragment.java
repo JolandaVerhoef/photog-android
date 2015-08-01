@@ -5,8 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 /**
  * Shows a dialog in which you can enter a location to browse to.
@@ -25,22 +26,21 @@ public class EnterLocationDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String url = getArguments().getString("url");
-        final EditText input = new EditText(getActivity());
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        input.setLayoutParams(lp);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_enter_location, null);
+        final EditText input = (EditText) view.findViewById(R.id.location_input);
         input.setText(url);
+        input.setSelection(input.getText().length());
+        input.requestFocus();
+        final PhotogFragment parentFragment = (PhotogFragment) getParentFragment();
 
-        return new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.open_url)
-                .setView(input)
-                .setPositiveButton(R.string.open,
-                        (dialog, whichButton) -> {
-                            ((PhotogFragment) this.getParentFragment()).onAlbumSelected(
-                                    input.getText().toString());
-                        }
-                )
+        Dialog alertDialog = new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.enter_location)
+                .setView(view)
+                .setPositiveButton(R.string.go, (dialog, whichButton) ->
+                            parentFragment.onAlbumSelected(input.getText().toString()))
+                .setCancelable(true)
                 .create();
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        return alertDialog;
     }
 }
