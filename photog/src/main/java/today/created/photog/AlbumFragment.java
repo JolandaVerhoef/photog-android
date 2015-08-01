@@ -28,7 +28,9 @@ import rx.schedulers.Schedulers;
  * This fragment can show one album using a viewpager.
  * The url for this album is passed through via the fragment's arguments
  */
-public class AlbumFragment extends Fragment {
+public class AlbumFragment extends Fragment implements PhotogView.OnFlingListener,
+        ViewPager.OnPageChangeListener {
+
     public interface OnAlbumSelectedListener {
         void onAlbumSelected(String path);
     }
@@ -80,35 +82,33 @@ public class AlbumFragment extends Fragment {
         } else {
             loadPhotos();
         }
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
 
-            @Override
-            public void onPageSelected(int position) {
-                currentPage = position;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+        mViewPager.addOnPageChangeListener(this);
+        ((PhotogView) rootView).setOnFlingUpListener(this);
 
         bottomFeaturesView = rootView.findViewById(R.id.bottom_features);
         bottomFeaturesView.setOnClickListener(view1 -> openLocationDialog());
+    }
 
-        ((PhotogView) rootView).setOnFlingUpListener(new PhotogView.OnFlingListener() {
-            @Override
-            public void onFlingUp() {
-                showBottomFeatures();
-            }
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
-            @Override
-            public void onFlingDown() {
-                hideBottomFeatures();
-            }
-        });
+    @Override
+    public void onPageSelected(int position) {
+        currentPage = position;
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {}
+
+    @Override
+    public void onFlingUp() {
+        showBottomFeatures();
+    }
+
+    @Override
+    public void onFlingDown() {
+        hideBottomFeatures();
     }
 
     private void loadPhotos() {
