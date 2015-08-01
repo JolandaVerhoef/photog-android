@@ -8,4 +8,5 @@
 
     <string name="enter_location">Enter location</string>
     <string name="go">go</string>
+    <string name="choose_orientation">Choose orientation</string>
 </resources>

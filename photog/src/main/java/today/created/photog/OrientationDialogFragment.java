@@ -34,7 +34,7 @@ public class OrientationDialogFragment extends DialogFragment {
         int currentChoice = getArguments().getInt("choice");
 
         Dialog alertDialog = new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.enter_location)
+                .setTitle(R.string.choose_orientation)
                 .setSingleChoiceItems(getActivity().getResources().getStringArray(R.array.orientation_options),
                         currentChoice, (dialogInterface, i) -> {
                             targetFragment.onOrientationSelected(i);
