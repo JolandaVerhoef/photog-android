@@ -13,11 +13,25 @@
                                          android:layout_width="match_parent"
                                          android:layout_height="match_parent"/>
 
-    <Button android:id="@+id/bottom_features"
+    <RelativeLayout
+        android:id="@+id/bottom_features"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/location_chooser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/enter_location"
-            android:layout_gravity="bottom"
-            android:visibility="gone"/>
+            android:layout_alignParentBottom="true"/>
+
+        <ImageButton
+            android:id="@+id/orientation_chooser"
+            android:layout_width="56dp"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_above="@id/location_chooser"/>
+    </RelativeLayout>
 
 </today.created.photog.PhotogView>

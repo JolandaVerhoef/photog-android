@@ -1,11 +1,13 @@
 package today.created.photog;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -30,6 +32,8 @@ import rx.schedulers.Schedulers;
  */
 public class AlbumFragment extends Fragment implements PhotogView.OnFlingListener,
         ViewPager.OnPageChangeListener {
+
+    private ImageButton mViewOrientationChooser;
 
     public interface OnAlbumSelectedListener {
         void onAlbumSelected(String path);
@@ -87,7 +91,10 @@ public class AlbumFragment extends Fragment implements PhotogView.OnFlingListene
         ((PhotogView) rootView).setOnFlingUpListener(this);
 
         bottomFeaturesView = rootView.findViewById(R.id.bottom_features);
-        bottomFeaturesView.setOnClickListener(view1 -> openLocationDialog());
+        mViewOrientationChooser = (ImageButton) bottomFeaturesView.findViewById(R.id.orientation_chooser);
+        mViewOrientationChooser.setImageResource(getOrientationDrawable(getActivity().getRequestedOrientation()));
+        mViewOrientationChooser.setOnClickListener(view -> openOrientationDialog());
+        bottomFeaturesView.findViewById(R.id.location_chooser).setOnClickListener(view1 -> openLocationDialog());
     }
 
     @Override
@@ -152,6 +159,13 @@ public class AlbumFragment extends Fragment implements PhotogView.OnFlingListene
         EnterLocationDialogFragment.newInstance(mPath).show(getFragmentManager(), "dialog");
     }
 
+    private void openOrientationDialog() {
+        int currentOrientation = getActivity().getRequestedOrientation();
+        OrientationDialogFragment dialogFragment = OrientationDialogFragment.newInstance(currentOrientation);
+        dialogFragment.setTargetFragment(this, 0);
+        dialogFragment.show(getFragmentManager(), "orientation_dialog");
+    }
+
     private void showBottomFeatures() {
         bottomFeaturesView.setVisibility(View.VISIBLE);
     }
@@ -160,4 +174,22 @@ public class AlbumFragment extends Fragment implements PhotogView.OnFlingListene
         bottomFeaturesView.setVisibility(View.GONE);
     }
 
+    public void onOrientationSelected(int choice) {
+        int orientation;
+        switch(choice) {
+            case 0: orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT; break;
+            case 1: orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE; break;
+            default: orientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR; break;
+        }
+        getActivity().setRequestedOrientation(orientation);
+        mViewOrientationChooser.setImageResource(getOrientationDrawable(orientation));
+    }
+
+    private int getOrientationDrawable(int requestedOrientation) {
+        switch (requestedOrientation) {
+            case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT: return R.drawable.ic_action_screen_lock_portrait;
+            case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE: return R.drawable.ic_action_screen_lock_landscape;
+            default: return R.drawable.ic_action_screen_rotation;
+        }
+    }
 }

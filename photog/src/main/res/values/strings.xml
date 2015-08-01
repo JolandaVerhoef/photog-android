@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="orientation_options">
+        <item>Force portrait</item>
+        <item>Force landscape</item>
+        <item>Automatic</item>
+    </string-array>
+
     <string name="enter_location">Enter location</string>
     <string name="go">go</string>
 </resources>
