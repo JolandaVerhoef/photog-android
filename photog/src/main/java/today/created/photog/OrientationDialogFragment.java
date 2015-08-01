@@ -13,11 +13,6 @@ import android.view.WindowManager;
  * Copyright (c) 2015 Blendle. All rights reserved.
  */
 public class OrientationDialogFragment extends DialogFragment {
-    private int choice;
-
-    public OrientationDialogFragment() {
-    }
-
     public static OrientationDialogFragment newInstance(int currentOrientation) {
         int choice;
         switch(currentOrientation) {
@@ -42,19 +37,12 @@ public class OrientationDialogFragment extends DialogFragment {
                 .setTitle(R.string.enter_location)
                 .setSingleChoiceItems(getActivity().getResources().getStringArray(R.array.orientation_options),
                         currentChoice, (dialogInterface, i) -> {
-                    choice = i;
-                })
-                .setPositiveButton(R.string.go, (dialog, whichButton) -> {
-                    targetFragment.onOrientationSelected(getChoice());
-                    this.dismiss();
+                            targetFragment.onOrientationSelected(i);
+                            this.dismiss();
                 })
                 .setCancelable(true)
                 .create();
         alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         return alertDialog;
-    }
-
-    public int getChoice() {
-        return choice;
     }
 }

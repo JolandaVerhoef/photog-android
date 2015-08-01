@@ -1,5 +1,7 @@
 package today.created.photog;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -182,6 +184,7 @@ public class AlbumFragment extends Fragment implements PhotogView.OnFlingListene
             default: orientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR; break;
         }
         getActivity().setRequestedOrientation(orientation);
+        getActivity().getSharedPreferences("photog", Context.MODE_PRIVATE).edit().putInt("orientation", orientation).commit();
         mViewOrientationChooser.setImageResource(getOrientationDrawable(orientation));
     }
 

@@ -1,5 +1,8 @@
 package today.created.photog;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +18,12 @@ public class PhotogFragment extends Fragment
         implements AlbumFragment.OnAlbumSelectedListener {
 
     private String host;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        activity.setRequestedOrientation(activity.getSharedPreferences("photog", Context.MODE_PRIVATE).getInt("orientation", ActivityInfo.SCREEN_ORIENTATION_SENSOR));
+    }
 
     @Nullable
     @Override
